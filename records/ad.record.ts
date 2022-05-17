@@ -47,4 +47,9 @@ export class adRecord implements AdEntity{
 
         return results.length === 0 ? null : new adRecord(results[0]);
     }
+
+    static async listAll(): Promise<adRecord[] | null>{
+        const [result] = await pool.execute("SELECT * FROM `ad`") as AdRecordResults;
+        return result.map(result => new adRecord(result))
+    }
 }

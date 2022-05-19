@@ -17,7 +17,7 @@ app.use(rateLimit({
 }))
 app.use(handleError)
 app.get('/test', async (req, res) => {
-    console.log(await adRecord.listAll())
+    console.log(await adRecord.listChoosen('Karol'))
 })
 app.listen(3001, '0.0.0.0', () => {
     console.log('Listening on port http://localhost:3001')

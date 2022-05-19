@@ -2,6 +2,16 @@ import {adRecord} from "../records/ad.record";
 import {pool} from "../uttils/db";
 import {AdEntity} from "../types";
 
+const defaultObj = {
+    id: '021912',
+    name: 'sss',
+    description: 'blah',
+    url: 'http://localhost',
+    price: 0,
+    lat: 9,
+    lon: 9
+}
+
 afterAll(async () => {
     await pool.end();
 })
@@ -50,48 +60,29 @@ test('AdRecotd.findAll returns array of found entries when searching for sometin
 })
 
 test('AdRecotd.findAll returns smaller ammount of data.', async () => {
-    const ad = await adRecord.listAll('');
-
+    const ad = await adRecord.listAll('Karol');
+    console.log(ad)
     expect((ad[0] as AdEntity ).id).toBeDefined();
     expect((ad[0] as AdEntity ).price).toBeUndefined();
     expect((ad[0] as AdEntity ).description).toBeUndefined();
 
 })
 
-/*test('listAll() method returns value', async () => {
-    expect( await adRecord.listAll()).toBeDefined();
+test('adRecord.insert returns new UUID', async () => {
+    const ad = new adRecord(defaultObj);
+
+    await ad.insert();
+
+    expect(ad.id).toBeDefined();
+    expect(typeof ad.id).toBe('string');
+
+    const foundAd = await adRecord.getOne(ad.id);
+    console.log()
+    expect(foundAd).toBeDefined();
+    expect(foundAd).not.toBeNull();
+    expect(foundAd.id).toBe(ad.id)
+
 })
-
-test('listAll() method returns value', async () => {
-    expect( await adRecord.listAll()).toBeDefined();
-})
-
-test('choosenList() returns a value', async () => {
-    expect( await adRecord.listChoosen('testowy')).toBeDefined();
-})
-
-test('choosenList() method returns null', async () => {
-    expect(await adRecord.listChoosen('---')).toBeNull();
-})
-
-test('inserted id exist', async () => {
-    const newone = new adRecord({
-        id: '1234567',
-        name: 'debeściak',
-        description: 'blah',
-        url: 'http://localhost',
-        price: 0,
-        lat: 9,
-        lon: 9
-    })
-    await newone.insert();
-
-    expect(await adRecord.getOne('123456')).toBeDefined();
-})
-
-afterAll(() => {
-    pool.end();
-})*/
 
 
 

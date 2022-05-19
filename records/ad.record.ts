@@ -50,7 +50,7 @@ export class adRecord implements AdEntity{
     }
 
     static async listAll(name: string): Promise<SimpleAdEntity[]>{
-        const [results] = await pool.execute("SELECT * FROM `ad` WHERE `name` LIKE :seach",{
+        const [results] = await pool.execute("SELECT * FROM `ad` WHERE `name` LIKE :search",{
            search: `%${name}%`
         }) as AdRecordResults;
         return results.map(result => {
@@ -65,6 +65,8 @@ export class adRecord implements AdEntity{
     async insert(): Promise<string> {
         if(!this.id){
             this.id = uuid();
+        } else {
+            throw new Error('Cannot insert someting that is already inserted!');
         }
 
         const [results] = await pool.execute("INSERT INTO `ad` VALUES(:id,:name,:description,:price,:url,:lon,:lat)",{
